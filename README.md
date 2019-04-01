@@ -1,4 +1,4 @@
 # YmkClusterization
 
 
-implementation 'com.github.egorovv88:YmkClusterization:1.0'
+implementation 'com.github.egorovv88:ymk-clusterization:1.0.0'
