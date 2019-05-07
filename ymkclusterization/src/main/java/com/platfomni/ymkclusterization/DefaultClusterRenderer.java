@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.yandex.mapkit.geometry.BoundingBox;
+import com.yandex.mapkit.geometry.BoundingBoxHelper;
 import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.geometry.Polygon;
+import com.yandex.mapkit.geometry.PolylineBuilder;
 import com.yandex.mapkit.map.PlacemarkMapObject;
 import com.yandex.mapkit.map.VisibleRegion;
 import com.yandex.mapkit.mapview.MapView;
@@ -47,10 +51,23 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
 
     private boolean itemInRegion(Cluster<T> cluster) {
         VisibleRegion visibleRegion = mMap.getMap().getVisibleRegion();
-        return (cluster.getPosition().getLatitude() > visibleRegion.getBottomLeft().getLatitude() &&
-                cluster.getPosition().getLatitude() < visibleRegion.getTopRight().getLatitude() &&
-                cluster.getPosition().getLongitude() < visibleRegion.getTopRight().getLongitude() &&
-                cluster.getPosition().getLongitude() > visibleRegion.getBottomLeft().getLongitude());
+
+        PolylineBuilder polylineBuilder = new PolylineBuilder();
+        polylineBuilder.append(visibleRegion.getTopLeft());
+        polylineBuilder.append(visibleRegion.getTopRight());
+        polylineBuilder.append(visibleRegion.getBottomRight());
+        polylineBuilder.append(visibleRegion.getBottomLeft());
+
+        BoundingBox bounds = BoundingBoxHelper.getBounds(polylineBuilder.build());
+        Point northEast = bounds.getNorthEast();
+        Point southWest = bounds.getSouthWest();
+
+        Point position = cluster.getPosition();
+
+        return (position.getLatitude() > southWest.getLatitude() &&
+                position.getLatitude() < northEast.getLatitude() &&
+                position.getLongitude() < northEast.getLongitude() &&
+                position.getLongitude() > southWest.getLongitude());
     }
 
     public void drawMarker(T markerItem) {
