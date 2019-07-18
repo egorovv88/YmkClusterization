@@ -15,6 +15,8 @@ import com.yandex.mapkit.map.VisibleRegion;
 import com.yandex.mapkit.mapview.MapView;
 import com.yandex.runtime.image.ImageProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRenderer<T> {
@@ -39,7 +41,24 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
                 if (t.getSize() <= 1) {
                     drawMarker(t.getItems().iterator().next());
                 } else {
-                    drawCluster(t);
+                    List<T> itemsOutOfCluster = new ArrayList<>();
+                    for (T item : t.getItems()) {
+                        if (item.isOutOfCluster()) {
+                            itemsOutOfCluster.add(item);
+                        }
+                    }
+
+                    if (t.getSize() - itemsOutOfCluster.size() <= 1) {
+                        drawMarker(t.getItems().iterator().next());
+                    } else {
+                        drawCluster(t, itemsOutOfCluster.size());
+                    }
+
+                    if (itemsOutOfCluster.size() > 0) {
+                        for (T item : itemsOutOfCluster) {
+                            drawMarker(item);
+                        }
+                    }
                 }
             }
         }
@@ -56,9 +75,18 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
     public void drawMarker(T markerItem) {
     }
 
+    /**
+     * use getItemClusterResource() for overrive layout res cluster
+     * */
+    @Deprecated
     public void drawCluster(Cluster<T> t) {
         PlacemarkMapObject clusterObject = mClusterManager.getClusterMarkerCollection().addMarker(calculateCenterCluster(t));
         clusterObject.setIcon(ImageProvider.fromBitmap(clusterMarker(context, t.getSize())));
+    }
+
+    private void drawCluster(Cluster<T> t, int outOfClusterItems) {
+        PlacemarkMapObject clusterObject = mClusterManager.getClusterMarkerCollection().addMarker(calculateCenterCluster(t));
+        clusterObject.setIcon(ImageProvider.fromBitmap(clusterMarker(context, t.getSize() - outOfClusterItems)));
     }
 
     private Point calculateCenterCluster(Cluster<T> t) {
@@ -75,8 +103,17 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
         return mClusterManager;
     }
 
-    private static Bitmap clusterMarker(Context context, int count) {
-        @SuppressLint("InflateParams") View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_cluster, null);
+    /**
+     * return layout file
+     * <p>
+     * file must contains TextView with id = "@+id/count"
+     */
+    public Integer getItemClusterResource() {
+        return R.layout.item_cluster;
+    }
+
+    private Bitmap clusterMarker(Context context, int count) {
+        @SuppressLint("InflateParams") View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(getItemClusterResource(), null);
 
         TextView txt = marker.findViewById(R.id.count);
         txt.setText(String.valueOf(count));

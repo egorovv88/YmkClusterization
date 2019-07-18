@@ -39,6 +39,10 @@ public class ClusterIconRenderer extends DefaultClusterRenderer<MarkerItem> {
     }
 
     private int getIconForMarker(MarkerItem markerItem) {
+        if (markerItem.getStore().getParam() == -1) {
+            return markerItem.isSelected() ? R.drawable.ic_marker_selected : R.drawable.ic_non_cluster_marker;
+        }
+
         switch (markerItem.getStore().getParam() % 3) {
             case 0:
                 return markerItem.isSelected() ? R.drawable.ic_marker_selected : R.drawable.ic_marker;
@@ -84,9 +88,8 @@ public class ClusterIconRenderer extends DefaultClusterRenderer<MarkerItem> {
     }
 
     @Override
-    public void drawCluster(Cluster<MarkerItem> t) {
-        //можно наприсовать кастомный кластер
-        super.drawCluster(t);
+    public Integer getItemClusterResource() {
+        return R.layout.item_cluster;
     }
 
     private PlacemarkMapObject getMarkerItem(MarkerItem markerItem) {
@@ -128,24 +131,4 @@ public class ClusterIconRenderer extends DefaultClusterRenderer<MarkerItem> {
         }
     }
 
-    private static class Transformation extends BitmapTransformation {
-
-        @Override
-        protected Bitmap transform(@NonNull BitmapPool bitmapPool, @NonNull Bitmap original, int width, int height) {
-            Bitmap get = bitmapPool.get(width, height, Bitmap.Config.ARGB_8888);
-            Bitmap result = Bitmap.createBitmap(get, 0, 0, get.getWidth(), get.getHeight() * 2);
-
-            Canvas canvas = new Canvas(result);
-
-            Paint paint = new Paint();
-
-            canvas.drawBitmap(original, 0, 0, paint);
-            return result;
-        }
-
-        @Override
-        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
-
-        }
-    }
 }

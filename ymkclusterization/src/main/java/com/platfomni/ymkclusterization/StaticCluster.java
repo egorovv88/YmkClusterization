@@ -27,6 +27,16 @@ public class StaticCluster<T extends ClusterItem> implements Cluster<T> {
         return this.mItems.remove(t);
     }
 
+    public boolean hasOutOfClusterItem() {
+        for (T t : mItems) {
+            if (t.isOutOfCluster()) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     public Collection<T> getItems() {
         return this.mItems;
     }

@@ -31,6 +31,11 @@ public class MarkerItem implements ClusterItem {
         return new Point(store.getLat(), store.getLng());
     }
 
+    @Override
+    public boolean isOutOfCluster() {
+        return store.getParam() == -1;
+    }
+
     public Store getStore() {
         return store;
     }

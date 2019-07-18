@@ -194,9 +194,11 @@ public class MainActivity extends AppCompatActivity implements InputListener {
     public List<MarkerItem> mockStores() {
         List<MarkerItem> markers = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 750; i++) {
+        for (int i = 0; i < 15; i++) {
             markers.add(new MarkerItem(new Store(57.5 + random.nextDouble(), 55.5 + random.nextDouble() * 2, random.nextInt())));
         }
+
+        //markers.add(new MarkerItem(new Store(57.5 + random.nextDouble(), 55.5 + random.nextDouble() * 2, -1)));
         return markers;
     }
 }
