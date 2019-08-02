@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.platfomni.ymkclusterization.ClusterManager;
+import com.platfomni.ymkclusterization.MapView;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
@@ -21,11 +21,9 @@ import com.yandex.mapkit.logo.VerticalAlignment;
 import com.yandex.mapkit.map.CameraPosition;
 import com.yandex.mapkit.map.InputListener;
 import com.yandex.mapkit.map.Map;
-import com.yandex.mapkit.mapview.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -37,13 +35,6 @@ public class MainActivity extends AppCompatActivity implements InputListener {
 
     @BindView(R.id.mapview)
     private MapView mapView;
-
-    @BindView(R.id.plus)
-    private ImageView plus;
-    @BindView(R.id.minus)
-    private ImageView minus;
-    @BindView(R.id.user_location)
-    private ImageView userLocation;
 
     private ClusterManager<MarkerItem> clusterManager;
     private ClusterIconRenderer clusterIconRenderer;
@@ -73,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements InputListener {
         setContentView(R.layout.activity_main);
 
         mapView = findViewById(R.id.mapview);
-        plus = findViewById(R.id.plus);
-        minus = findViewById(R.id.minus);
-        userLocation = findViewById(R.id.user_location);
 
         Point point = new Point(58.008765, 56.226545);
 
@@ -92,28 +80,6 @@ public class MainActivity extends AppCompatActivity implements InputListener {
 
         mapView.getMap().getLogo().setAlignment(new Alignment(HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM)); //Переместить лого в левый нижний угол
 
-        plus.setOnClickListener(v -> { //Увеличиваем масштаб
-            mapView.getMap().move(
-                    new CameraPosition(mapView.getMap().getCameraPosition().getTarget(), mapView.getMap().getCameraPosition().getZoom() + 1f, 0.0f, 0.0f),
-                    new Animation(Animation.Type.SMOOTH, ZOOM_DURATION),
-                    null);
-        });
-
-        minus.setOnClickListener(v -> { //Уменьшаем масштаб
-            mapView.getMap().move(
-                    new CameraPosition(mapView.getMap().getCameraPosition().getTarget(), mapView.getMap().getCameraPosition().getZoom() - 1f, 0.0f, 0.0f),
-                    new Animation(Animation.Type.SMOOTH, ZOOM_DURATION),
-                    null);
-        });
-
-        userLocation.setOnClickListener(v -> { //Центрируем пользователя
-            if (mapView.getMap().getUserLocationLayer().cameraPosition() != null) {
-                mapView.getMap().move(
-                        new CameraPosition(Objects.requireNonNull(mapView.getMap().getUserLocationLayer().cameraPosition()).getTarget(), 15, 0.0f, 0.0f),
-                        new Animation(Animation.Type.SMOOTH, USER_ZOOM_DURATION),
-                        null);
-            }
-        });
 
         clusterManager = new ClusterManager<>(this, mapView); //кластер-менеджер (отвечает за группировку маркеров, обботку нажатий на маркер/кластер)
         clusterIconRenderer = new ClusterIconRenderer(this, mapView, clusterManager); //кластер-рендер (отвечает за отрисовку маркеров/кластеров)

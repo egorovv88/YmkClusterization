@@ -146,4 +146,15 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
         return bitmap;
     }
 
+    public PlacemarkMapObject getMarkerItem(T markerItem) {
+        for (PlacemarkMapObject placemarkMapObject : getClusterManager().getClusterMarkerCollection().getMarkers()) {
+
+            if (markerItem.equals(placemarkMapObject.getUserData())) {
+                return placemarkMapObject;
+            }
+
+        }
+        return null;
+    }
+
 }

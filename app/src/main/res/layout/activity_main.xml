@@ -6,42 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.yandex.mapkit.mapview.MapView
+    <com.platfomni.ymkclusterization.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ImageView
-        android:id="@+id/plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_plus"
-        app:layout_constraintBottom_toTopOf="@+id/minus"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_minus"
-        app:layout_constraintBottom_toTopOf="@+id/user_location"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/user_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_place"
-        app:layout_constraintBottom_toBottomOf="@+id/mapview"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_height="match_parent"
+        app:control_button_size="40dp"
+        app:controls_position="end_bottom"
+        app:controls_padding="16dp"
+        />
 
 </android.support.constraint.ConstraintLayout>

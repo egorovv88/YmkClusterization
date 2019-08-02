@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MapView">
+        <attr name="control_button_size" format="dimension" />
+        <attr name="controls_position">
+            <enum name="start_top" value="1"/>
+            <enum name="start_bottom" value="2"/>
+            <enum name="end_top" value="3"/>
+            <enum name="end_bottom" value="4"/>
+        </attr>
+        <attr name="controls_padding" format="dimension" />
+
+        <attr name="img_plus" format="reference"/>
+        <attr name="img_minus" format="reference"/>
+        <attr name="img_location" format="reference"/>
+    </declare-styleable>
+
+</resources>
